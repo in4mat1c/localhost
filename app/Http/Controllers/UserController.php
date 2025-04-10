@@ -9,6 +9,8 @@ use App\Models\User;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
+use App\Models\UserHistory;
+use Illuminate\Support\Facades\Log;
 
 class UserController extends Controller
 {
@@ -94,7 +96,9 @@ class UserController extends Controller
 
     public function dashboard()
     {
-        return view('user.dashboard');
+        $history = UserHistory::where('user_id', auth()->id())->get(); 
+
+        return view('user.dashboard', compact('history'));
     }
 
     public function logout()

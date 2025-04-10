@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use App\Http\Controllers\UserController;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
+use App\Http\Controllers\SearchHistoryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -67,6 +68,8 @@ Route::middleware('auth')->group(function () {
     })->middleware('throttle:3,1')->name('verification.send');
 
     Route::get('/logout', [UserController::class, 'logout'])->name('logout');
+    Route::post('/save-search-history', [SearchHistoryController::class, 'store']);
+    Route::get('/search-history-data', [SearchHistoryController::class, 'getData']);
 });
 
 
