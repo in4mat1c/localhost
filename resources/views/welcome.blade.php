@@ -24,7 +24,22 @@
     </div>
     <div class="rounded-5 p-3 mt-3 shadow-lg">
         <div class="row flex-column flex-md-row">
-            <div class="col-md-12 d-flex justify-content-center align-items-center">
+            <div class="col-md-12 d-flex flex-column justify-content-center align-items-center">
+                <span class="fs-3 d-block text-center mb-2 fw-bold">ПРОСТОЙ И УДОБНЫЙ ДИЗАЙН</span> 
+                <img src="{{ asset('public/images/section2.png') }}" alt="" class="img-fluid rounded-5 mobile-image">
+            </div>
+        </div>
+    </div>
+    <div class="rounded-5 p-3 mt-3 shadow-lg">
+        <div class="row flex-column flex-md-row justify-content-center align-items-center">
+            <span class="fs-3 d-block text-center mb-2 fw-bold">ИНТЕГРАЦИИ</span> 
+            <div class="rounded-3 mx-5 my-2 p-2" style="width: 6rem;">
+                <img src="{{ asset('public/images/logos/kaspi.png') }}" class="card-img-top" alt="...">
+                <h5 class="text-center d-block">Kaspi</h5>
+            </div>
+            <div class="rounded-3 mx-5 my-2 p-2" style="width: 6rem;">
+                <img src="{{ asset('public/images/logos/wildberries.png') }}" class="card-img-top" alt="...">
+                <h5 class="text-center d-block">Wildberries</h5>
             </div>
         </div>
     </div>

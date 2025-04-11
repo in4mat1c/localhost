@@ -3,6 +3,9 @@
 namespace App\Services;
 
 use Illuminate\Support\Facades\Http;
+use GuzzleHttp\Client;
+use GuzzleHttp\Promise\Utils;
+use Illuminate\Support\Facades\Log;
 
 class WildBerriesService {
     public function getData($searchText) {
@@ -22,11 +25,13 @@ class WildBerriesService {
                 foreach($cardsSlice as $card) {
                     $price = $card['sizes'][0]['price']['total'];
                     $formattedAmount = number_format($price / 100, 0, '.', ' ') . ' ₸';
+                    $imagePath = $this->findBasket($card['id']);
+
                     $data[] = [
                         'id' => $card['id'],
                         'title' => $card['name'],
                         'price' => $formattedAmount,
-                        'imageUrl' => null,
+                        'imageUrl' => $imagePath,
                         'storeUrl' => 'https://global.wildberries.ru/catalog/' . $card['id'] . '/detail.aspx',
                     ];
                 }
@@ -47,5 +52,47 @@ class WildBerriesService {
             'status' => $response->status(),
             'body' => $response->body(),
         ];
+    }
+
+    private function findBasket($id) {
+        $idString = (string)$id;
+        $forth = substr($idString, 0, 4);  
+        $six = substr($idString, 0, 6);  
+        $resultId = $idString; 
+
+        foreach (range(10, 30) as $i) {
+            $urls[] = "https://basket-{$i}.wbcontent.net/vol{$forth}/part{$six}/{$resultId}/images/c516x688/1.webp";
+        }
+
+        $start = microtime(true);
+
+        $client = new Client();
+        $promises = [];
+
+        foreach ($urls as $url) {
+            $promises[$url] = $client->getAsync($url, [
+                'http_errors' => false,      
+                'timeout' => 2,              
+                'connect_timeout' => 1       
+            ]);
+        }
+
+        $results = Utils::settle($promises)->wait();
+
+        $successful = [];
+
+        foreach ($results as $url => $result) {
+            if (
+                $result['state'] === 'fulfilled' &&
+                $result['value']->getStatusCode() === 200
+            ) {
+                $successful[] = $url;
+            }
+        }
+
+        $end = microtime(true);
+        $duration = round($end - $start, 3); 
+
+        return $successful[0];
     }
 }

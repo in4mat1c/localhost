@@ -26,11 +26,6 @@ export default {
        PrimaryCard
     },
     props: ['cards', 'service_name', 'service_image'],
-    mounted() {
-        // Проверяем данные, которые пришли в пропс cards
-        console.log('Cards prop:', this.cards);
-        
-    }
 };
 </script>
 
